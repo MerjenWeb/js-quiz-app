@@ -12,15 +12,15 @@ To try out the quiz app, simply follow these steps:
 2. Open the index.html file in your web browser.
 
 Features:
--Choose quiz difficulty level: easy, medium, or hard.
--Get immediate feedback on selected answers.
--Track the number of correct answers.
--Responsive design for various screen sizes.
+ - Choose quiz difficulty level: easy, medium, or hard.
+ - Get immediate feedback on selected answers.
+ - Track the number of correct answers.
+ - Responsive design for various screen sizes.
 
 Technologies Used:
--JavaScript
--HTML
--CSS
+ - JavaScript
+ - HTML
+ - CSS
 
 Usage:
 Upon opening the app, you will see a welcome message and a "Go" button.
