@@ -1,32 +1,3 @@
-/* 
-Design Ingridients: (Following Jonas' lectures)
---- 01 TYPOGRAPHY SYSTEM (commonly used settings)
-
-- Font Sizes (px): 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
-
-- Font Weights: 
-- Line heights: 
-Letter-spacing:
---- 02 COLORS : 
-Colors: 
-Background: #fefefe
-Question Card and Welcome message Card: #45A08B
-Question : #f8e088
-Wrong answer: #d85555
-Correct answer: #448279
-
---- 03 IMAGES 
---- 04 ICONS
---- 05 SHADOWS
-
-	box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.075);
-
---- 06 BORDER-RADIUS
---- 07 WHITESPACE
-Spacing system (px)
-2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
-*/
-
 * {
   margin: 0;
   padding: 0;
@@ -42,9 +13,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   width: 100vw;
-  background-color: #45a08b;
+  height: 100vh;
+  padding: 10rem 0;
+  background-color: #45a18b;
   color: #343a40;
   font-weight: 400;
   font-family: 'Oxygen', sans-serif;
@@ -57,26 +29,36 @@ body {
 }
 
 .btn {
+  border: none;
+  border-radius: 11px;
   margin-top: 1.6rem;
+  color: #fff;
   font-family: 'Oxygen', sans-serif;
   font-size: 2.4rem;
   font-weight: 700;
-  color: #fff;
-  border: none;
-  border-radius: 11px;
   transition: background-color 0.3s;
 }
 
-.btn-reset,
+.btn-reset {
+  display: none;
+  padding: 0.8rem 5rem;
+  background-color: #f0be09;
+}
+
+.btn-reset:hover {
+  background-color: #f4d65e;
+  box-shadow: 0 2.4rem 4.8rem rgb(240, 190, 9, 0.1);
+  cursor: pointer;
+}
+
 .btn-mode {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   margin: 0.2rem;
   background-color: #fefefe;
   color: #343a40;
-  border-radius: 8px;
-  padding: 0.6rem 1.2rem;
 }
 
-.btn-reset:hover,
 .btn-mode:hover {
   background-color: #e9e7e7;
   cursor: pointer;
@@ -89,12 +71,13 @@ body {
 
 .active-box {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 50%;
-  padding: 4.8rem 2.5rem;
+  width: 50rem;
+  padding: 4.8rem 2.4rem;
   border-radius: 20px;
-  margin: auto;
+  margin: 5rem 5rem;
   background-color: #fefefe;
   text-align: center;
   box-shadow: 0 2.4rem 5.2rem rgba(0, 0, 0, 0.1);
@@ -123,8 +106,8 @@ body {
 
 .introduction {
   margin: 0.8rem 0;
-  font-size: 1.8rem;
   color: #495057;
+  font-size: 1.8rem;
   line-height: 1.8;
 }
 
@@ -153,24 +136,36 @@ body {
 /* .buttons {} */
 
 .btn-level {
-  padding: 1.2rem 0;
   width: 50%;
-}
-
-.btn-level:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  padding: 1.2rem 0;
 }
 
 .btn--easy {
   background-color: #45a08b;
 }
 
+.btn--easy:hover {
+  background-color: #008364;
+}
+
 .btn--mid {
   background-color: #f0be09;
 }
 
+.btn--mid:hover {
+  background-color: #f4d65e;
+}
+
 .btn--hard {
   background-color: #d85555;
+}
+
+.btn--hard:hover {
+  background-color: #d63030;
+}
+
+.btn-level:hover {
+  cursor: pointer;
 }
 
 .good-luck {
@@ -179,23 +174,167 @@ body {
   font-weight: 400;
 }
 
-/* - Font Sizes (px): 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98 
-Spacing system (px)
-2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128*/
+/**********************************************/
+/*************  Question BOX  *****************/
+/**********************************************/
+.question-box {
+  display: none;
+}
+
+.loading-message,
+.end-of-quiz {
+  color: #326760;
+  font-size: 2.2rem;
+  line-height: 1.8;
+}
+
+.difficulty {
+  margin-bottom: 2rem;
+  color: #326760;
+  font-size: 1.6rem;
+  text-align: end;
+}
+
+.question {
+  position: relative;
+}
+
+.question p {
+  padding: 5rem 2rem;
+  background-color: #f8e088;
+  color: #29554f;
+  font-size: 1.8rem;
+}
+
+.question::before {
+  content: attr(data-content);
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #29554f;
+  font-size: 1.4rem;
+  font-weight: 700;
+  box-shadow: 0 1rem 3.2rem rgba(69, 161, 139, 0.2);
+}
+
+.question::after {
+  content: '?';
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 100%;
+  background-color: #fff;
+  color: #29554f;
+  font-size: 1.4rem;
+  font-weight: 700;
+  box-shadow: 0 1rem 3.2rem rgba(69, 161, 139, 0.4);
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4rem;
+  row-gap: 1rem;
+  margin: 2rem;
+  text-align: start;
+}
+
+.answer {
+  padding: 1rem 0.5rem;
+  border: none;
+  box-shadow: inset 0 0 0 2px #92beb3;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #448279;
+  font-family: 'Oxygen', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.answer:hover {
+  box-shadow: inset 0 0 0 2px #45a18b;
+  background-color: #45a18b;
+  color: #fff;
+  cursor: pointer;
+}
+
+.answer.correct-answer {
+  background-color: #45a18b;
+  box-shadow: inset 0 0 0 2px #45a18b;
+  color: #fff;
+}
+
+.answer.incorrect-answer {
+  background-color: #d85555;
+  color: #fff;
+  box-shadow: inset 0 0 0 2px #d85555;
+}
+
+.disable-hover {
+  pointer-events: none;
+}
+
+.btns-prev-next {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4rem;
+}
+
+.btn-previous,
+.btn-next {
+  display: flex;
+  padding: 1rem 1rem;
+  border: none;
+  border-radius: 100%;
+  background-color: transparent;
+  color: #29554f;
+  box-shadow: 0 0 2rem rgba(69, 161, 139, 0.2);
+  transition: all 0.5s;
+}
+
+.btn-previous:hover,
+.btn-next:hover {
+  background-color: rgba(69, 161, 139, 0.1);
+  cursor: pointer;
+}
+
+/* Question card */
+.non-active {
+  display: none;
+}
 
 @media (max-width: 38em) {
   html {
     font-size: 50%;
-    box-sizing: border-box;
   }
 }
 
-@media (max-width: 23rem) {
+@media (max-width: 23em) {
   html {
     font-size: 45%;
   }
 
+  body {
+    padding: 2rem 1rem;
+  }
+
   .active-box {
-    width: 80%;
+    width: 100%;
+    padding: 2.4rem 1.2rem;
+    margin: 2rem;
   }
 }
+
+@media (max-width: 14em) {
+  .answers {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* - Font Sizes (px): 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98 
+Spacing system (px)
+2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128*/
