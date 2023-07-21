@@ -23,12 +23,12 @@ Technologies Used:
  - CSS
 
 Usage:
-Upon opening the app, you will see a welcome message and a "Go" button.
-Click the "Go" button to choose the difficulty level for the quiz.
-Select the desired difficulty level (easy, medium, or hard).
-The quiz questions will appear; you can choose your answers from the provided options.
-Immediate feedback will be displayed after each answer selection.
-After completing the quiz, you will see the total number of correct answers.
+ - Upon opening the app, you will see a welcome message and a "Let's Go" button.
+ - Click the "Let's Go" button to choose the difficulty level for the quiz.
+ - Select the desired difficulty level (easy, medium, or hard).
+ - The quiz questions will appear; you can choose your answers from the provided options.
+ - Immediate feedback will be displayed after each answer selection.
+ - After completing the quiz, you will see the total number of correct answers.
 
 Contributing:
 Contributions to this project are welcome. Feel free to create a pull request if you find any issues or have suggestions for improvements.
