@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Quiz App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>
+  </head>
+
+  <body>
+    <header class="header">
+      <button class="btn btn-reset">
+
+        <ion-icon class="icon" name="refresh"></ion-icon>
+      </button>
+      <button class="btn btn-mode">
+        <ion-icon class="icon" name="moon-outline"></ion-icon>
+        <!-- <ion-icon name="sunny-outline"></ion-icon> -->
+      </button>
+    </header>
+
+    <div class="active-box">
+
+      <div class="welcome-box">
+        <p class="emoji">🙋🏻‍♀️</p>
+        <p class="box-heading">Welcome on board!</p>
+        <p class="introduction">I'm Merjen, and I'm thrilled to present my first Quiz project built using
+          vanilla JavaScript.
+          This quiz features general knowledge questions with customizable difficulty levels.
+          Ready to challenge yourself?
+        </p>
+        <button class="btn btn-go">Let's GO!</button>
+      </div>
+
+      <div class="level-box">
+        <p class="emoji">🧠</p>
+        <p class="box-heading">Choose the difficulty level:</p>
+        <div class="buttons">
+          <button class="btn btn-level btn--easy">Easy</button>
+          <button class="btn btn-level btn--mid">Middle</button>
+          <button class="btn btn-level btn--hard">Hard</button>
+        </div>
+        <p class="good-luck">
+          GOOD LUCK! 🍀
+        </p>
+      </div>
+
+      <!-- <div class="question-card">
+        <p>Question <span>1</span> out of <span>10</span>.</p>
+
+      </div> -->
+    </div>
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  </body>
+
+</html>

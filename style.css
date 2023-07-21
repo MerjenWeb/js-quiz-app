@@ -1,0 +1,201 @@
+/* 
+Design Ingridients: (Following Jonas' lectures)
+--- 01 TYPOGRAPHY SYSTEM (commonly used settings)
+
+- Font Sizes (px): 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+
+- Font Weights: 
+- Line heights: 
+Letter-spacing:
+--- 02 COLORS : 
+Colors: 
+Background: #fefefe
+Question Card and Welcome message Card: #45A08B
+Question : #f8e088
+Wrong answer: #d85555
+Correct answer: #448279
+
+--- 03 IMAGES 
+--- 04 ICONS
+--- 05 SHADOWS
+
+	box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.075);
+
+--- 06 BORDER-RADIUS
+--- 07 WHITESPACE
+Spacing system (px)
+2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #45a08b;
+  color: #343a40;
+  font-weight: 400;
+  font-family: 'Oxygen', sans-serif;
+}
+
+.header {
+  position: absolute;
+  top: 2rem;
+  right: 2.4rem;
+}
+
+.btn {
+  margin-top: 1.6rem;
+  font-family: 'Oxygen', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  border-radius: 11px;
+  transition: background-color 0.3s;
+}
+
+.btn-reset,
+.btn-mode {
+  margin: 0.2rem;
+  background-color: #fefefe;
+  color: #343a40;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+}
+
+.btn-reset:hover,
+.btn-mode:hover {
+  background-color: #e9e7e7;
+  cursor: pointer;
+}
+
+.icon {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.active-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  padding: 4.8rem 2.5rem;
+  border-radius: 20px;
+  margin: auto;
+  background-color: #fefefe;
+  text-align: center;
+  box-shadow: 0 2.4rem 5.2rem rgba(0, 0, 0, 0.1);
+}
+
+/**********************************************/
+/***************   WELCOME BOX   ***************/
+/**********************************************/
+.level-box {
+  display: none;
+}
+
+.welcome-box {
+  padding: 3rem;
+}
+
+.emoji {
+  font-size: 10.2rem;
+}
+
+.box-heading {
+  margin: 0.8rem 0;
+  font-size: 3.6rem;
+  font-weight: 700;
+}
+
+.introduction {
+  margin: 0.8rem 0;
+  font-size: 1.8rem;
+  color: #495057;
+  line-height: 1.8;
+}
+
+.ready {
+  margin-top: 1.6rem;
+  font-size: 1.6rem;
+}
+
+.btn-go {
+  padding: 0.8rem 5rem;
+  background-color: #f0be09;
+}
+
+.btn-go:hover {
+  background-color: #f4d65e;
+  box-shadow: 0 2.4rem 4.8rem rgb(240, 190, 9, 0.1);
+  cursor: pointer;
+}
+
+/**********************************************/
+/*************  CHOOSE LEVEL BOX  *************/
+/**********************************************/
+
+/* .level-box {} */
+
+/* .buttons {} */
+
+.btn-level {
+  padding: 1.2rem 0;
+  width: 50%;
+}
+
+.btn-level:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn--easy {
+  background-color: #45a08b;
+}
+
+.btn--mid {
+  background-color: #f0be09;
+}
+
+.btn--hard {
+  background-color: #d85555;
+}
+
+.good-luck {
+  margin-top: 2.2rem;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+/* - Font Sizes (px): 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98 
+Spacing system (px)
+2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128*/
+
+@media (max-width: 38em) {
+  html {
+    font-size: 50%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 23rem) {
+  html {
+    font-size: 45%;
+  }
+
+  .active-box {
+    width: 80%;
+  }
+}
