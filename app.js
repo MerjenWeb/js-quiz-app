@@ -14,10 +14,8 @@ let correctAnswers = 0;
 
 // Resetting
 resetBtn.addEventListener('click', function () {
-  console.log('Now you are using reset logic.');
-
-  welcomeBox.style.display = 'block';
-  levelBox.style.display = 'none';
+  welcomeBox.style.display = 'none';
+  levelBox.style.display = 'block';
   questionBox.style.display = 'none';
   questionBox.innerHTML = `<p class="loading-message"> Loading questions . . . ⌛️</p>`;
   resetBtn.style.display = 'none';
@@ -27,8 +25,6 @@ resetBtn.addEventListener('click', function () {
 
 // Hiding welcome message, showing "Choose the level" box
 btnGo.addEventListener('click', function () {
-  console.log('Now you are using btnGo logic.');
-
   welcomeBox.style.display = 'none';
   levelBox.style.display = 'block';
 });
@@ -36,8 +32,6 @@ btnGo.addEventListener('click', function () {
 // Hiding "Choose the level" box, displaying Question box
 btnsLevel.forEach(btn => {
   btn.addEventListener('click', function () {
-    console.log('Now you are using btnLevel logic.');
-
     levelBox.style.display = 'none';
     questionBox.style.display = 'block';
   });
@@ -46,8 +40,6 @@ btnsLevel.forEach(btn => {
 function init() {
   // Function that fetches API, clears the Question Box and displays the data, catches the error.
   const getQuestions = function (url) {
-    console.log('Now you are using API.');
-
     return fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -61,33 +53,25 @@ function init() {
   };
   //  Fetch API according to these event listeners
   btnEasy.addEventListener('click', function () {
-    console.log('Now you are using Easy.');
-
     return getQuestions(
-      'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple'
+      'https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple'
     );
   });
 
   btnMid.addEventListener('click', function () {
-    console.log('Now you are using Mid.');
-
     return getQuestions(
-      'https://opentdb.com/api.php?amount=10&category=9&difficulty=medium&type=multiple'
+      'https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple'
     );
   });
 
   btnHard.addEventListener('click', function () {
-    console.log('Now you are using Hard.');
-
     return getQuestions(
-      'https://opentdb.com/api.php?amount=10&category=9&difficulty=hard&type=multiple'
+      'https://opentdb.com/api.php?amount=10&category=18&difficulty=hard&type=multiple'
     );
   });
 
   // Displaying the data
   const displayData = function (data) {
-    console.log('Now you are using DATA.');
-
     // Clear previous data in the container
     questionBox.innerHTML = '';
 
@@ -100,21 +84,25 @@ function init() {
       ].sort();
 
       const html = `
-    <div class=${currentQuestion !== i ? 'non-active' : 'active'}>
-      <p class="difficulty">Difficulty: ${object.difficulty.toUpperCase()}</p>
+      <div class=${currentQuestion !== i ? 'non-active' : 'active'}>
+      <div class="question-box-header">
+        <p class="timer">00:30</p>
+        <p class="difficulty">${object.difficulty.toUpperCase()}</p>
+      </div>
       <div class="question" data-content="${i + 1} / ${objectsArr.length}">
-      <p><b>Question</b>: ${object.question}</p>
+        <p><b>Question</b>: ${object.question}</p>
       </div>
       <div class="answers">
-      ${answers
-        .map(answer => {
-          return `<button class="answer">
-            ${answer}
-            </button>`;
-        })
-        .join('')}
+        ${answers
+          .map(answer => {
+            return `<button class="answer">
+          ${answer}
+        </button>`;
+          })
+          .join('')}
       </div>
-    </div>`;
+    </div>
+      `;
       questionBox.insertAdjacentHTML('beforeend', html);
     });
 
@@ -125,9 +113,12 @@ function init() {
       answer.addEventListener('click', handleClick);
     });
 
+    // before the click i need the time to be running
+    // after the click i need to reset the time and start it over
+
     function handleClick(e) {
       if (answerSelected) {
-        return; // Exit if an answer has already been selected
+        return;
       }
 
       answerSelected = true; // Set flag to true indicating answer selection
@@ -150,9 +141,15 @@ function init() {
       if (selectedAnswerText === correctAnswer) {
         selectedAnswerEl.classList.add('correct-answer');
         correctAnswers++;
-      } else {
+      }
+      if (selectedAnswerText !== correctAnswer) {
         selectedAnswerEl.classList.add('incorrect-answer');
-        console.log(selectedAnswerEl);
+        const answerArr = Array.from(answerBtns);
+        answerArr.filter(answer => {
+          if (answer.innerText.trim() === correctAnswer) {
+            answer.classList.add('correct-answer');
+          }
+        });
       }
 
       //add the message for 10 out of 10 and 0 out of ten
@@ -184,7 +181,7 @@ function init() {
         } else {
           displayData(data);
         }
-      }, 1000);
+      }, 600);
     }
   };
 }
