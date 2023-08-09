@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS Quiz App</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="./idea.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" type="image/x-icon" href="./ideas.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <script defer src="app.js"></script>
   </head>
 
@@ -22,17 +22,48 @@
         <p class="box-heading">Welcome on board!</p>
         <p class="introduction">I'm Merjen, and I'm thrilled to present my first Quiz project built using
           vanilla JavaScript.
-          This quiz features Computer Science questions with customizable difficulty levels.
+          This quiz covers a wide range of topics, offering questions from various categories with customizable
+          difficulty levels.
           Ready to challenge yourself?
         </p>
-        <button class="btn btn-go">Let's GO!</button>
+        <button class="btn btn-go green-background-color">Let's GO!</button>
       </div>
 
-      <div class="level-box">
+      <div class="category-box display-none">
+        <p class="emoji">📋</p>
+        <p class="box-heading">Choose the category:</p>
+        <div class="select">
+          <label for="category"></label>
+          <select name="category" id="category" class="green-font-color">
+            <option value="any">Any category</option>
+            <option value="9">General Knowledge</option>
+            <option value="10">Entertainment: Books</option>
+            <option value="11">Entertainment: Film</option>
+            <option value="12">Entertainment: Music</option>
+            <option value="14">Entertainment: Television</option>
+            <option value="15">Entertainment: Video Games</option>
+            <option value="16">Entertainment: Board Games</option>
+            <option value="17">Science & Nature</option>
+            <option value="18">Science: Computers</option>
+            <option value="20">Mythology</option>
+            <option value="21">Sports</option>
+            <option value="22">Geography</option>
+            <option value="23">History</option>
+            <option value="27">Animals</option>
+            <option value="28">Vehicles</option>
+            <option value="29">Entertainment: Comics</option>
+            <option value="31">Entertainment: Japanese Anime & Manga</option>
+            <option value="32">Entertainment: Cartoon & Animations</option>
+          </select>
+        </div>
+        <button class="next btn green-background-color">Next</button>
+      </div>
+
+      <div class="level-box display-none">
         <p class="emoji">🧠</p>
         <p class="box-heading">Choose the difficulty level:</p>
         <div class="buttons">
-          <button class="btn btn-level btn--easy">Easy</button>
+          <button class="btn btn-level btn--easy green-background-color">Easy</button>
           <button class="btn btn-level btn--mid">Medium</button>
           <button class="btn btn-level btn--hard">Hard</button>
         </div>
@@ -41,15 +72,14 @@
         </p>
       </div>
 
-      <div class="question-box">
+      <div class="question-box display-none">
         <p class="loading-message"> Loading questions . . . ⌛️</p>
       </div>
 
-      <button class="btn btn-reset">Play Again!</button>
+
+      <button class="btn btn-reset display-none green-background-color">Play Again!</button>
 
     </div>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   </body>
 
 </html>
