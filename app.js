@@ -2,8 +2,8 @@
 
 const welcomeBox = document.querySelector('.welcome-box');
 const levelBox = document.querySelector('.level-box');
-const questionBox = document.querySelector('.question-box');
 const categoryBox = document.querySelector('.category-box');
+const questionBox = document.querySelector('.question-box');
 
 const selectCategory = document.getElementById('category');
 
@@ -15,31 +15,32 @@ const btnMid = document.querySelector('.btn--mid');
 const btnHard = document.querySelector('.btn--hard');
 const btnReset = document.querySelector('.btn-reset');
 
+let selectedValue;
 let currentQuestion = 0;
 let correctAnswers = 0;
-let selectedValue;
-let timerContainer;
+let timerInterval;
+let timeLeftDisplay;
+let time = 20;
 
-// Helper function - to replace HTML entity with normal symbols (when fetching API)
-function decodeHTMLEntities(encodedString) {
-  const textarea = document.createElement('textarea');
-  textarea.innerHTML = encodedString;
-  return textarea.value;
+// Function to start the timer
+function startTimer(duration, display, objectsArr, data) {
+  clearInterval(timerInterval);
+  display.textContent = `00:${time}`;
+
+  let seconds;
+  timerInterval = setInterval(function () {
+    seconds = String(duration % 60).padStart(2, '0');
+    console.log(display.textContent);
+    display.textContent = `00:${seconds}`;
+    duration--;
+
+    if (duration < 0) {
+      clearInterval(timerInterval);
+      display.textContent = `00:${time}`;
+      moveToNextQuestion(objectsArr, data);
+    }
+  }, 1000);
 }
-
-// Resetting
-btnReset.addEventListener('click', function () {
-  welcomeBox.style.display = 'none';
-  categoryBox.style.display = 'block';
-  levelBox.style.display = 'none';
-  questionBox.style.display = 'none';
-  questionBox.innerHTML = `<p class="loading-message"> Loading questions . . . ⌛️</p>`;
-  btnReset.style.display = 'none';
-  currentQuestion = 0;
-  correctAnswers = 0;
-  selectCategory.selectedIndex = 0;
-  selectedValue = 'any';
-});
 
 // Hiding welcome message, showing "Category" box
 btnGo.addEventListener('click', function () {
@@ -59,21 +60,6 @@ btnNext.addEventListener('click', function (e) {
   categoryBox.style.display = 'none';
   levelBox.style.display = 'block';
 });
-
-// Function that fetches API, clears the Question Box and displays the data, catches the error.
-const getQuestions = function (url) {
-  console.log('getQuestions');
-  return fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      questionBox.innerHTML = '';
-      displayData(data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      questionBox.innerHTML = `<p class="loading-message">${error}. Please try again later. ❌</p>`;
-    });
-};
 
 // Hiding "Choose the level" box, displaying Question box
 btnsLevel.forEach(btn => {
@@ -98,41 +84,27 @@ btnsLevel.forEach(btn => {
   });
 });
 
-const displayData = function (data) {
+// Function that fetches API, clears the Question Box and displays the data, catches the error.
+function getQuestions(url) {
+  return fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      questionBox.innerHTML = '';
+      displayData(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      questionBox.innerHTML = `<p class="loading-message">${error}. Please try again later. ❌</p>`;
+    });
+}
+
+function displayData(data) {
   // Clear previous data in the container
   questionBox.innerHTML = '';
-
   const objectsArr = data.results;
 
   objectsArr.forEach((object, i) => {
-    const answers = [...object.incorrect_answers, object.correct_answer].sort();
-
-    // Assign the timer container globally
-    timerContainer = questionBox.querySelector('#timer');
-
-    const html = `
-    <div class=${currentQuestion !== i ? 'non-active' : 'active'}>
-    <div class="question-box-header green-font-color">
-    <div id="timer">00:45</div>
-      <p class="difficulty">${object.difficulty.toUpperCase()}</p>
-    </div>
-    <div class="question" data-content="${i + 1} / ${objectsArr.length}">
-      <p><b>Question</b>: ${object.question}</p>
-    </div>
-    <div class="answers">
-      ${answers
-        .map(answer => {
-          return `<button class="answer green-font-color">
-        ${answer}
-      </button>`;
-        })
-        .join('')}
-    </div>
-    <div class="current-score green-font-color">Current score: <strong>${correctAnswers}</strong>/${
-      objectsArr.length
-    }</div>
-  </div>
-    `;
+    const html = generateQuestionTemplate(data, objectsArr, object, i);
     questionBox.insertAdjacentHTML('beforeend', html);
   });
 
@@ -140,75 +112,146 @@ const displayData = function (data) {
   let answerSelected = false; // It starts with a value of false indicating that no answer has been selected initially
 
   answerBtns.forEach((answer, i) => {
-    answer.addEventListener('click', handleClick);
+    answer.addEventListener('click', e =>
+      handleClick(e, data, answerSelected, objectsArr, answerBtns)
+    );
   });
+}
 
-  function handleClick(e) {
-    if (answerSelected) {
-      return;
-    }
+// Function that generates the HTML template for each question and returns it
+function generateQuestionTemplate(data, objectsArr, object, i) {
+  const answers = [...object.incorrect_answers, object.correct_answer].sort();
+  const template = `
+  <div class=${currentQuestion !== i ? 'non-active' : 'active'}>
+  <div class="question-box-header green-font-color">
+  <div id="time-left"></div>
+  <p class="difficulty">${object.difficulty.toUpperCase()}</p>
+  </div>
+  <div class="question" data-content="${i + 1} / ${objectsArr.length}">
+  <p><b>Question</b>: ${object.question}</p>
+  </div>
+  <div class="answers">
+  ${answers
+    .map(answer => {
+      return `<button class="answer green-font-color">
+      ${answer}
+      </button>`;
+    })
+    .join('')}
+    </div>
+    <div class="current-score green-font-color">Current score: <strong>${correctAnswers}</strong>/${
+    objectsArr.length
+  }</div>
+    </div>
+    `;
+  const questionContainer = document.createElement('div');
+  questionContainer.innerHTML = template;
+  timeLeftDisplay = questionContainer.querySelector('#time-left');
 
-    answerSelected = true; // Set flag to true indicating answer selection
+  startTimer(time, timeLeftDisplay, objectsArr, data);
+  console.log(timeLeftDisplay);
 
-    const selectedAnswerEl = e.target;
-    const selectedAnswerText = selectedAnswerEl.innerText.trim();
-    const correctAnswer = objectsArr[currentQuestion].correct_answer;
+  return questionContainer.innerHTML;
+}
 
-    if (selectedAnswerEl.classList.contains('answer')) {
-      answerBtns.forEach(btn => {
-        btn.classList.remove('correct-answer', 'incorrect-answer');
-        btn.disabled = true;
-        btn.removeEventListener('click', handleClick);
-        if (btn !== selectedAnswerEl) {
-          btn.classList.add('disable-hover');
-        }
-      });
-    }
-
-    const cleanCorrectAnswer = decodeHTMLEntities(correctAnswer);
-
-    if (selectedAnswerText === cleanCorrectAnswer) {
-      selectedAnswerEl.classList.add('correct-answer');
-      correctAnswers++;
-    }
-    if (selectedAnswerText !== cleanCorrectAnswer) {
-      selectedAnswerEl.classList.add('incorrect-answer');
-      const answerArr = Array.from(answerBtns);
-      answerArr.filter(answer => {
-        if (answer.innerText.trim() === cleanCorrectAnswer) {
-          answer.classList.add('correct-answer');
-        }
-      });
-    }
-
-    setTimeout(() => {
-      selectedAnswerEl.removeEventListener('click', handleClick);
-
-      currentQuestion++;
-
-      if (currentQuestion >= objectsArr.length) {
-        // Quiz complete
-
-        questionBox.innerHTML = `
-          <div class="end-of-quiz">
-          <p>Quiz complete! 🎉 </p>
-          <p>You answered <b>${correctAnswers}</b> out of <b>${
-          objectsArr.length
-        }</b> questions correctly.
-          <p>
-          ${
-            correctAnswers < 5
-              ? `Good effort! Keep practicing and you'll see improvement in your scores! 💪🏼`
-              : 'Great job! Keep it up! 👏🏼'
-          }
-          </p>
-          </div>
-          `;
-
-        btnReset.style.display = 'inline-block';
-      } else {
-        displayData(data);
-      }
-    }, 600);
+function handleClick(e, data, answerSelected, objectsArr, answerBtns) {
+  if (answerSelected) {
+    return;
   }
-};
+
+  answerSelected = true; // Set flag to true indicating answer selection
+
+  const selectedAnswerEl = e.target;
+  const selectedAnswerText = selectedAnswerEl.innerText.trim();
+  const correctAnswer = objectsArr[currentQuestion].correct_answer;
+
+  clearInterval(timerInterval);
+  timeLeftDisplay = document.getElementById('time-left');
+  startTimer(time, timeLeftDisplay, objectsArr, data);
+
+  if (selectedAnswerEl.classList.contains('answer')) {
+    answerBtns.forEach(btn => {
+      btn.classList.remove('correct-answer', 'incorrect-answer');
+      btn.disabled = true;
+      btn.removeEventListener('click', handleClick);
+      if (btn !== selectedAnswerEl) {
+        btn.classList.add('disable-hover');
+      }
+    });
+  }
+
+  const cleanCorrectAnswer = decodeHTMLEntities(correctAnswer);
+
+  if (selectedAnswerText === cleanCorrectAnswer) {
+    selectedAnswerEl.classList.add('correct-answer');
+    correctAnswers++;
+  }
+  if (selectedAnswerText !== cleanCorrectAnswer) {
+    selectedAnswerEl.classList.add('incorrect-answer');
+    const answerArr = Array.from(answerBtns);
+    answerArr.filter(answer => {
+      if (answer.innerText.trim() === cleanCorrectAnswer) {
+        answer.classList.add('correct-answer');
+      }
+    });
+  }
+
+  setTimeout(() => {
+    selectedAnswerEl.removeEventListener('click', handleClick);
+    moveToNextQuestion(objectsArr, data);
+  }, 600);
+}
+
+// Helper function - to replace HTML entity with normal symbols (when fetching API)
+function decodeHTMLEntities(encodedString) {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = encodedString;
+  return textarea.value;
+}
+
+function moveToNextQuestion(objectsArr, data) {
+  currentQuestion++;
+  clearInterval(timerInterval);
+  if (currentQuestion >= objectsArr.length) {
+    handleQuizCompletion(objectsArr);
+  } else {
+    displayData(data);
+  }
+}
+
+// Quiz complete
+function handleQuizCompletion(objectsArr) {
+  clearInterval(timerInterval);
+  questionBox.innerHTML = `
+  <div class="end-of-quiz">
+  <p>Quiz complete! 🎉 </p>
+  <p>You answered <b>${correctAnswers}</b> out of <b>${
+    objectsArr.length
+  }</b> questions correctly.
+  <p>
+  ${
+    correctAnswers < 5
+      ? `Good effort! Keep practicing and you'll see improvement in your scores! 💪🏼`
+      : 'Great job! Keep it up! 👏🏼'
+  }
+  </p>
+  </div>
+  `;
+
+  btnReset.style.display = 'inline-block';
+}
+
+// Resetting
+btnReset.addEventListener('click', function () {
+  clearInterval(timerInterval);
+  welcomeBox.style.display = 'none';
+  categoryBox.style.display = 'block';
+  levelBox.style.display = 'none';
+  questionBox.style.display = 'none';
+  questionBox.innerHTML = `<p class="loading-message"> Loading questions . . . ⌛️</p>`;
+  btnReset.style.display = 'none';
+  currentQuestion = 0;
+  correctAnswers = 0;
+  selectCategory.selectedIndex = 0;
+  selectedValue = 'any';
+});
