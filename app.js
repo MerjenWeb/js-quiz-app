@@ -10,36 +10,45 @@ const selectCategory = document.getElementById('category');
 const btnGo = document.querySelector('.btn-go');
 const btnNext = document.querySelector('.next');
 const btnsLevel = document.querySelectorAll('.btn-level');
-const btnEasy = document.querySelector('.btn--easy');
-const btnMid = document.querySelector('.btn--mid');
-const btnHard = document.querySelector('.btn--hard');
 const btnReset = document.querySelector('.btn-reset');
+const timer = document.querySelector('.timer');
 
 let selectedValue;
 let currentQuestion = 0;
 let correctAnswers = 0;
 let timerInterval;
-let timeLeftDisplay;
-let time = 20;
 
 // Function to start the timer
-function startTimer(duration, display, objectsArr, data) {
+function startTimer(objectsArr, data, answerBtns) {
+  let time = 25;
+
   clearInterval(timerInterval);
-  display.textContent = `00:${time}`;
+  timer.textContent = `00:${String(time).padStart(2, '0')}`;
 
-  let seconds;
-  timerInterval = setInterval(function () {
-    seconds = String(duration % 60).padStart(2, '0');
-    console.log(display.textContent);
-    display.textContent = `00:${seconds}`;
-    duration--;
+  const tick = function () {
+    time--;
 
-    if (duration < 0) {
+    timer.textContent = `00:${String(time).padStart(2, '0')}`;
+
+    if (time === 0) {
+      const correctAnswer = objectsArr[currentQuestion].correct_answer;
+      const correctAnswerButton = Array.from(answerBtns).find(
+        btn => btn.innerText.trim() === decodeHTMLEntities(correctAnswer)
+      );
+      correctAnswerButton.classList.add('correct-answer');
+      answerBtns.forEach(btn => {
+        btn.disabled = true;
+        btn.removeEventListener('click', handleClick);
+      });
+    }
+
+    if (time < 0) {
       clearInterval(timerInterval);
-      display.textContent = `00:${time}`;
       moveToNextQuestion(objectsArr, data);
     }
-  }, 1000);
+  };
+
+  timerInterval = setInterval(tick, 1000);
 }
 
 // Hiding welcome message, showing "Category" box
@@ -85,7 +94,7 @@ btnsLevel.forEach(btn => {
 });
 
 // Function that fetches API, clears the Question Box and displays the data, catches the error.
-function getQuestions(url) {
+async function getQuestions(url) {
   return fetch(url)
     .then(response => response.json())
     .then(data => {
@@ -111,6 +120,8 @@ function displayData(data) {
   const answerBtns = document.querySelectorAll('.answer');
   let answerSelected = false; // It starts with a value of false indicating that no answer has been selected initially
 
+  startTimer(objectsArr, data, answerBtns);
+
   answerBtns.forEach((answer, i) => {
     answer.addEventListener('click', e =>
       handleClick(e, data, answerSelected, objectsArr, answerBtns)
@@ -121,10 +132,12 @@ function displayData(data) {
 // Function that generates the HTML template for each question and returns it
 function generateQuestionTemplate(data, objectsArr, object, i) {
   const answers = [...object.incorrect_answers, object.correct_answer].sort();
-  const template = `
+  timer.style.display = 'inline';
+  btnReset.style.display = 'inline-block';
+
+  return `
   <div class=${currentQuestion !== i ? 'non-active' : 'active'}>
   <div class="question-box-header green-font-color">
-  <div id="time-left"></div>
   <p class="difficulty">${object.difficulty.toUpperCase()}</p>
   </div>
   <div class="question" data-content="${i + 1} / ${objectsArr.length}">
@@ -144,14 +157,6 @@ function generateQuestionTemplate(data, objectsArr, object, i) {
   }</div>
     </div>
     `;
-  const questionContainer = document.createElement('div');
-  questionContainer.innerHTML = template;
-  timeLeftDisplay = questionContainer.querySelector('#time-left');
-
-  startTimer(time, timeLeftDisplay, objectsArr, data);
-  console.log(timeLeftDisplay);
-
-  return questionContainer.innerHTML;
 }
 
 function handleClick(e, data, answerSelected, objectsArr, answerBtns) {
@@ -161,13 +166,11 @@ function handleClick(e, data, answerSelected, objectsArr, answerBtns) {
 
   answerSelected = true; // Set flag to true indicating answer selection
 
+  // startTimer(objectsArr, data, answerBtns);
+
   const selectedAnswerEl = e.target;
   const selectedAnswerText = selectedAnswerEl.innerText.trim();
   const correctAnswer = objectsArr[currentQuestion].correct_answer;
-
-  clearInterval(timerInterval);
-  timeLeftDisplay = document.getElementById('time-left');
-  startTimer(time, timeLeftDisplay, objectsArr, data);
 
   if (selectedAnswerEl.classList.contains('answer')) {
     answerBtns.forEach(btn => {
@@ -222,6 +225,7 @@ function moveToNextQuestion(objectsArr, data) {
 // Quiz complete
 function handleQuizCompletion(objectsArr) {
   clearInterval(timerInterval);
+  timer.textContent = '';
   questionBox.innerHTML = `
   <div class="end-of-quiz">
   <p>Quiz complete! 🎉 </p>
@@ -237,13 +241,12 @@ function handleQuizCompletion(objectsArr) {
   </p>
   </div>
   `;
-
-  btnReset.style.display = 'inline-block';
 }
 
 // Resetting
 btnReset.addEventListener('click', function () {
   clearInterval(timerInterval);
+  timer.style.display = 'none';
   welcomeBox.style.display = 'none';
   categoryBox.style.display = 'block';
   levelBox.style.display = 'none';
