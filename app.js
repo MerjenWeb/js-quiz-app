@@ -18,39 +18,6 @@ let currentQuestion = 0;
 let correctAnswers = 0;
 let timerInterval;
 
-// Function to start the timer
-function startTimer(objectsArr, data, answerBtns) {
-  let time = 25;
-
-  clearInterval(timerInterval);
-  timer.textContent = `00:${String(time).padStart(2, '0')}`;
-
-  const tick = function () {
-    time--;
-
-    timer.textContent = `00:${String(time).padStart(2, '0')}`;
-
-    if (time === 0) {
-      const correctAnswer = objectsArr[currentQuestion].correct_answer;
-      const correctAnswerButton = Array.from(answerBtns).find(
-        btn => btn.innerText.trim() === decodeHTMLEntities(correctAnswer)
-      );
-      correctAnswerButton.classList.add('correct-answer');
-      answerBtns.forEach(btn => {
-        btn.disabled = true;
-        btn.removeEventListener('click', handleClick);
-      });
-    }
-
-    if (time < 0) {
-      clearInterval(timerInterval);
-      moveToNextQuestion(objectsArr, data);
-    }
-  };
-
-  timerInterval = setInterval(tick, 1000);
-}
-
 // Hiding welcome message, showing "Category" box
 btnGo.addEventListener('click', function () {
   welcomeBox.style.display = 'none';
@@ -105,6 +72,39 @@ async function getQuestions(url) {
       console.error('Error:', error);
       questionBox.innerHTML = `<p class="loading-message">${error}. Please try again later. ❌</p>`;
     });
+}
+
+// Function to start the timer
+function startTimer(objectsArr, data, answerBtns) {
+  let time = 25;
+
+  clearInterval(timerInterval);
+  timer.textContent = `00:${String(time).padStart(2, '0')}`;
+
+  const tick = function () {
+    time--;
+
+    timer.textContent = `00:${String(time).padStart(2, '0')}`;
+
+    if (time === 0) {
+      const correctAnswer = objectsArr[currentQuestion].correct_answer;
+      const correctAnswerButton = Array.from(answerBtns).find(
+        btn => btn.innerText.trim() === decodeHTMLEntities(correctAnswer)
+      );
+      correctAnswerButton.classList.add('correct-answer');
+      answerBtns.forEach(btn => {
+        btn.disabled = true;
+        btn.removeEventListener('click', handleClick);
+      });
+    }
+
+    if (time < 0) {
+      clearInterval(timerInterval);
+      moveToNextQuestion(objectsArr, data);
+    }
+  };
+
+  timerInterval = setInterval(tick, 1000);
 }
 
 function displayData(data) {
@@ -165,8 +165,6 @@ function handleClick(e, data, answerSelected, objectsArr, answerBtns) {
   }
 
   answerSelected = true; // Set flag to true indicating answer selection
-
-  // startTimer(objectsArr, data, answerBtns);
 
   const selectedAnswerEl = e.target;
   const selectedAnswerText = selectedAnswerEl.innerText.trim();
@@ -248,13 +246,13 @@ btnReset.addEventListener('click', function () {
   clearInterval(timerInterval);
   timer.style.display = 'none';
   welcomeBox.style.display = 'none';
-  categoryBox.style.display = 'block';
   levelBox.style.display = 'none';
   questionBox.style.display = 'none';
-  questionBox.innerHTML = `<p class="loading-message"> Loading questions . . . ⌛️</p>`;
   btnReset.style.display = 'none';
-  currentQuestion = 0;
-  correctAnswers = 0;
+  categoryBox.style.display = 'block';
   selectCategory.selectedIndex = 0;
   selectedValue = 'any';
+  questionBox.innerHTML = `<p class="loading-message"> Loading questions . . . ⌛️</p>`;
+  currentQuestion = 0;
+  correctAnswers = 0;
 });
