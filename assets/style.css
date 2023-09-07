@@ -43,7 +43,7 @@ body {
   margin-top: 1.6rem;
   padding: 0.8rem 5rem;
   color: #fff;
-  font-family: 'Poppins', sans-serif;
+  font-family: inherit;
   font-size: 2.4rem;
   transition: background-color 0.3s;
 }
@@ -110,7 +110,7 @@ body {
   border-radius: 6px;
   margin-top: 2rem;
   background-color: #fff;
-  font-family: 'Poppins', sans-serif;
+  font-family: inherit;
   font-size: 1.8rem;
   font-weight: 500;
 }
@@ -228,7 +228,7 @@ body {
   box-shadow: inset 0 0 0 2px #45a08c;
   border-radius: 6px;
   background-color: #fff;
-  font-family: 'Poppins', sans-serif;
+  font-family: inherit;
   font-weight: 500;
   font-size: 1.6rem;
 }

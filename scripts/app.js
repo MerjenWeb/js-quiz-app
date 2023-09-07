@@ -199,6 +199,7 @@ function handleClick(e, data, answerSelected, objectsArr, answerBtns) {
 
   setTimeout(() => {
     selectedAnswerEl.removeEventListener('click', handleClick);
+    answerSelected = false;
     moveToNextQuestion(objectsArr, data);
   }, 600);
 }
