@@ -133,7 +133,6 @@ function displayData(data) {
 function generateQuestionTemplate(data, objectsArr, object, i) {
   const answers = [...object.incorrect_answers, object.correct_answer].sort();
   timer.style.display = 'inline';
-  btnReset.style.display = 'inline-block';
 
   return `
   <div class=${currentQuestion !== i ? 'non-active' : 'active'}>
@@ -199,7 +198,6 @@ function handleClick(e, data, answerSelected, objectsArr, answerBtns) {
 
   setTimeout(() => {
     selectedAnswerEl.removeEventListener('click', handleClick);
-    answerSelected = false;
     moveToNextQuestion(objectsArr, data);
   }, 600);
 }
@@ -240,6 +238,7 @@ function handleQuizCompletion(objectsArr) {
   </p>
   </div>
   `;
+  btnReset.style.display = 'inline-block';
 }
 
 // Resetting
